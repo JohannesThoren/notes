@@ -17,10 +17,13 @@ export default async function Vaults(props: { user: user }) {
 	vaults = vaults.reverse().sort();
 
 	return (
-		<div className="py-2 px-2">
-			<h2 className="my-2 text-2xl">Vaults</h2>
-			<div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-9 justify-items-center gap-3">
+		<div className="py-2 px-2 h-screen">
+			<div className="flex justify-between items-center">
+				<h2 className="my-2 text-2xl">Vaults</h2>
 				<NewVault user={props.user} />
+			</div>
+
+			<div className="flex justify-center gap-2 flex-wrap">
 				<VaultList vaults={vaults} />
 			</div>
 		</div>

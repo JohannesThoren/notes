@@ -36,4 +36,15 @@ async function auth_user(email: string, password: string) {
     return user.id
 }
 
-export { validate_session, auth_user }
+async function validate_vault_ownership(userId: number, vaultId: number) {
+    console.log(typeof(vaultId))
+    const vault = await client.vault.findUnique({
+        where: {id: vaultId}
+    })
+
+    if (!vault) redirect("/vaults?error=Invalid Vault")
+
+    return vault
+}
+
+export { validate_session, auth_user, validate_vault_ownership }

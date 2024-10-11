@@ -2,29 +2,28 @@
 
 import Dialog from "@/components/Dialog";
 import Form from "@/components/Form";
-import NewVaultButton from "./NewVautlButton";
 import Input from "@/components/Input";
 import Submit from "@/components/Submit";
-import { notFound, redirect } from "next/navigation";
-import { user } from "@prisma/client";
-import client from "../../../prisma/prismadb";
-import { revalidatePath } from "next/cache";
+import { user, vault } from "@prisma/client";
 import { IoMdAdd } from "react-icons/io";
+import client from "../../../../prisma/prismadb";
+import { notFound, redirect } from "next/navigation";
 
-export default async function NewVault(props: { user: user }) {
+export default async function NewCategory(props: { user: user; vault: vault }) {
 	async function newVault(formData: FormData) {
 		"use server";
-		const vaultName = formData.get("vault_name")?.toString();
-		if (!vaultName) notFound();
 
-		await client.vault.create({
+		const name = formData.get("category_name")?.toString();
+		if (!name) notFound();
+
+		const category = await client.category.create({
 			data: {
-				name: vaultName,
-				userId: props.user.id,
+				name: name,
+				vaultId: props.vault.id,
 			},
 		});
 
-		revalidatePath("/vaults");
+		redirect(`/vaults/${props.vault.id}`);
 	}
 
 	return (
@@ -37,10 +36,10 @@ export default async function NewVault(props: { user: user }) {
 		>
 			<Form action={newVault}>
 				<div>
-					<Input placeholder="Vault Name" name="vault_name"></Input>
+					<Input placeholder="Category Name" name="category_name"></Input>
 				</div>
 				<div className="">
-					<Submit value={"Create Vault"} />
+					<Submit value={"Create Category"} />
 				</div>
 			</Form>
 		</Dialog>

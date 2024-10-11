@@ -1,14 +1,22 @@
+"use client";
+
+import { vault } from "@prisma/client";
+import Link from "next/link";
 import { CiVault } from "react-icons/ci";
 
-export default function VaultButton(props: { text: string }) {
+export default function name(params: { vault: vault }) {
 	return (
-		<div className="w-full dark:bg-stone-800 bg-stone-200 rounded-md dark:hover:bg-stone-700 hover:bg-stone-300  grid place-items-center hover:cursor-pointer">
-			<div className="flex flex-col items-center">
-				<span className="text-6xl">
+		<Link
+			key={params.vault.id}
+			className="w-[45dvw] h-[45dvw] md:w-[30dvw] md:h-[30dvw] lg:w-[10dvw] lg:h-[10dvw] bg-stone-200 dark:bg-stone-800 rounded-md grid place-items-center dark:hover:bg-stone-700 hover:bg-stone-300 cursor-pointer block"
+			href={`/vaults/${params.vault.id}`}
+		>
+			<div className="grid place-items-center">
+				<span className="text-5xl text-center">
 					<CiVault />
 				</span>
-				<p>{props.text}</p>
+				<p>{params.vault.name}</p>
 			</div>
-		</div>
+		</Link>
 	);
 }

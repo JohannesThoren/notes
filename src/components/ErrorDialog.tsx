@@ -1,26 +1,15 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-export default function Dialog({
-	children,
-	button,
-	
-}: {
-	children: React.ReactNode;
-	button: React.ReactNode;
-}) {
-	const [open, setOpen] = useState(false);
+export default function ErrorDialog() {
+    let params = useSearchParams();
+    let error = params.get("error");
+	const [open, setOpen] = useState(error != null);
 
 	return (
 		<>
-			<div
-				onClick={() => {
-					setOpen(true);
-				}}
-			>
-				{button}
-			</div>
 			{open && (
 				<div
 					id="backdrop"
@@ -35,7 +24,7 @@ export default function Dialog({
 						>
 							Close
 						</button>
-						{children}
+						<p>{error}</p>
 					</div>
 				</div>
 			)}
