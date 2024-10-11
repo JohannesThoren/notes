@@ -19,9 +19,8 @@ model user {
   last_name       String
   email           String        @unique
   password_hash   String
-  password_salt   String
   created         DateTime      @default(now())
-  session         String
+  session         String        @unique
   session_expires DateTime
   vault           vault[]
   vault_share     vault_share[]

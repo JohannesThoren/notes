@@ -8,7 +8,7 @@ export default function Form({
   return (
     <form
       action={action}
-      className="bg-stone-200 dark:bg-stone-800 [&>*]:m-2 py-1 px-2 "
+      className="bg-stone-200 dark:bg-stone-800 [&>*]:m-2 py-1 px-2 rounded-md"
     >
       {children}
     </form>
