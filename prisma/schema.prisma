@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id              Int           @id @unique @default(autoincrement())
+  first_name      String
+  last_name       String
+  email           String        @unique
+  password_hash   String
+  password_salt   String
+  created         DateTime      @default(now())
+  session         String
+  session_expires DateTime
+  vault           vault[]
+  vault_share     vault_share[]
+  file_share      file_share[]
+}
+
+model vault {
+  owner       user          @relation(fields: [userId], references: [id])
+  id          Int           @id @unique @default(autoincrement())
+  name        String
+  userId      Int
+  vault_share vault_share[]
+  created     DateTime      @default(now())
+  files       file[]
+  category    category[]
+}
+
+model vault_share {
+  user    user      @relation(fields: [userId], references: [id])
+  vault   vault     @relation(fields: [vaultId], references: [id])
+  userId  Int
+  vaultId Int
+  expires DateTime?
+  created DateTime  @default(now())
+
+  @@id([userId, vaultId])
+}
+
+model category {
+  id      Int      @id @unique @default(autoincrement())
+  name    String
+  color   String?
+  file    file[]
+  vault   vault    @relation(fields: [vaultId], references: [id])
+  created DateTime @default(now())
+  vaultId Int
+}
+
+model file {
+  vault      vault        @relation(fields: [vaultId], references: [id])
+  id         Int          @id @unique @default(autoincrement())
+  name       String
+  vaultId    Int
+  category   category[]
+  created    DateTime     @default(now())
+  updated    DateTime
+  file_share file_share[]
+}
+
+model file_share {
+  user    user      @relation(fields: [userId], references: [id])
+  file    file      @relation(fields: [fileId], references: [id])
+  userId  Int
+  fileId  Int
+  created DateTime  @default(now())
+  expires DateTime?
+
+  @@id([userId, fileId])
+}
